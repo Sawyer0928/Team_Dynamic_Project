@@ -37,9 +37,13 @@ shinyServer(function(input, output) {
       response <- paste0(base,EiaKey,"&series_id=",id)
       return(response)
     }
-    responseData <- GET(eiaData(category, state))
-    body <- content(responseData, "text")
-    data <- fromJSON(body)
+    #This call only works if the user inputs 'Generation' or 'Consumption'
+    #Made an if statement in case we want to add more user inputs later
+    if(category=="Generation"||category=="Consumption"){
+      responseData <- GET(eiaData(category, state))
+      body <- content(responseData, "text")
+      data <- fromJSON(body)
+    }
     chartData <-as.data.frame(data$series$data) #turns returned api data into a dataframe
     #x1 should be year and x2 should be the data
   })
