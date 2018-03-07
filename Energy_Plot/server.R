@@ -8,13 +8,40 @@
 #
 
 library(shiny)
+library(httr)
+library(jsonlite)
+library(dplyr)
 source("keys.R")
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
-   
   output$dataPlot <- renderPlot({
-    
+    category <- input$cat
+    state <- input$state
+    eiaData <- function(category, state) { #Generates API key
+      base <- "http://api.eia.gov/series/?api_key="
+      id <- ""
+      if(category=="Generation") { #Checks user input
+        id <- paste0("ELEC.GEN.ALL-",input$state,"-99.A")
+      } else {
+        if(input$fuel == "Coal"){ #Checks user input
+          id <- paste0("ELEC.CONS_TOT.COW-",input$state,"-99.A")
+        } else if (input$fuel == "Petroleum Liquids"){
+          id <- paste0("ELEC.CONS_TOT.PEL-",input$state,"-99.A")
+        } else if (input$fuel == "Petroleum Coke"){
+          id <- paste0("ELEC.CONS_TOT.PC-",input$state,"-99.A")
+        } else {
+          id <- paste0("ELEC.CONS_TOT.NG-",input$state,"-99.A")
+        }
+      }
+      response <- paste0(base,EiaKey,"&series_id=",id)
+      return(response)
+    }
+    responseData <- GET(eiaData(category, state))
+    body <- content(responseData, "text")
+    data <- fromJSON(body)
+    chartData <-as.data.frame(data$series$data) #turns returned api data into a dataframe
+    #x1 should be year and x2 should be the data
   })
   
 })
