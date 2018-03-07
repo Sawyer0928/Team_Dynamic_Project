@@ -11,6 +11,7 @@ library(shiny)
 library(httr)
 library(jsonlite)
 library(dplyr)
+library(ggplot2)
 source("keys.R")
 
 # Define server logic required to draw a histogram
@@ -46,6 +47,17 @@ shinyServer(function(input, output) {
     }
     chartData <-as.data.frame(data$series$data) #turns returned api data into a dataframe
     #x1 should be year and x2 should be the data
+    if(input$cat=="Generation") {
+      ylab <- "Thousand Megawatthours"
+      chartTitle <- paste0("Net Energy Generation for ", input$state)
+    } else {
+      ylab <- "Thousand Pounds"
+      chartTitle <- paste0("Consumption of Energy with ", input$fuel," as a source")
+    }
+    p <- ggplot(chartData, aes(X1,X2,group=1)) + geom_line() + geom_point() +
+      labs(x="Year", y=ylab) + ggtitle(chartTitle) + 
+      theme(plot.title = element_text(family="Trebuchet MS", face="bold", size = 20))
+    print(p)
   })
   
 })
