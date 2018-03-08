@@ -51,8 +51,8 @@ shinyServer(function(input, output) {
       ylab <- "Thousand Megawatthours"
       chartTitle <- paste0("Net Energy Generation for ", input$state)
     } else {
-      ylab <- "Thousand Pounds"
-      chartTitle <- paste0("Consumption of Energy with ", input$fuel," as a source")
+      ylab <- "Thousand Tons"
+      chartTitle <- paste0("Consumption of Energy with ", input$fuel," as a Source")
     }
     p <- ggplot(chartData, aes(X1,X2,group=1)) + geom_line() + geom_point() +
       labs(x="Year", y=ylab) + ggtitle(chartTitle) + 

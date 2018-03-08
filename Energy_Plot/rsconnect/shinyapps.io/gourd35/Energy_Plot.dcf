@@ -1,0 +1,12 @@
+name: Energy_Plot
+title: Energy_Plot
+username:
+account: gourd35
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 295243
+bundleId: 1258000
+url: https://gourd35.shinyapps.io/Energy_Plot/
+when: 1520466423.79312
+asMultiple: FALSE
+asStatic: FALSE
